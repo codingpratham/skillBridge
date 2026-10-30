@@ -1,0 +1,46 @@
+// use prisma-8
+
+model User {
+  id       ObjectId @id @map("_id")
+  email    String   @unique
+  password String
+  targetRoles TargetRole[]
+  tokens    Token[]
+  refreshTokens RefreshToken[]
+  @@map("users")
+}
+
+model TargetRole {
+  id       ObjectId @id @map("_id")
+  role      Roles 
+  userId   ObjectId @map("user_id")
+  user    User     @relation(fields: [userId], references: [id])
+  @@map("target_roles")
+}
+
+enum Roles {
+  BACKEND_DEVELOPER
+  FRONTEND_DEVELOPER
+  FULLSTACK_DEVELOPER
+}
+
+model Token {
+  id       ObjectId @id @map("_id")
+  token    String   @unique
+  userId   ObjectId @map("user_id")
+  user     User     @relation(fields: [userId], references: [id])
+  createdAt Date @onCreate(now()) @map("created_at")
+  updatedAt Date @onUpdate(now()) @map("updated_at")
+  @@map("tokens")
+}
+
+model RefreshToken {
+  id       ObjectId @id @map("_id")
+  token    String   @unique
+  userId   ObjectId @map("user_id")
+  user     User     @relation(fields: [userId], references: [id])
+  expiresAt Date
+  createdAt Date @onCreate(now()) @map("created_at")
+  updatedAt Date @onUpdate(now()) @map("updated_at")
+  @@map("refresh_tokens")
+}
