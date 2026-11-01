@@ -114,6 +114,8 @@ export const login = async (req: Request, res: Response) => {
                 error: 'Invalid request data',
             });
         }
+
+        const {email,password}=schema.data
         
         
     } catch (err:any) {
@@ -123,4 +125,6 @@ export const login = async (req: Request, res: Response) => {
             error: 'Registration failed'
         });
     }
+
+
 }
