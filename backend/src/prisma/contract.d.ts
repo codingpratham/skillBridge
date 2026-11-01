@@ -22,9 +22,9 @@ import type {
 } from '@prisma/orm-mongo/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'df3ff024161077be09d49a5cb124d9d903e8c22599e450b3f952ca1ebd8542ea'>;
+  StorageHashBase<'b129c50ef5d9124ce22c837251f2202acda03e53d2c96a600ee43b887dc9e0f1'>;
 export type ExecutionHash =
-  ExecutionHashBase<'871851913517d058bc16b4f329fe434f7779f1c7f76ff88959981bd5ddd14afb'>;
+  ExecutionHashBase<'4c1c87a1647f717ddac6905224917026dea30b6edaf52d631c9457db984e3f94'>;
 export type ProfileHash =
   ProfileHashBase<'251b3ce23f6c9f561892e7c1af9d2cc941a13d64ba1aa7226b90036b09568cc3'>;
 
@@ -77,23 +77,13 @@ export namespace Models {
     user: unbound_User;
     readonly [RelationKeys]?: 'user';
   };
-  export type unbound_Token = {
-    createdAt: FieldOutputTypes['__unbound__']['Token']['createdAt'];
-    id: FieldOutputTypes['__unbound__']['Token']['id'];
-    token: FieldOutputTypes['__unbound__']['Token']['token'];
-    updatedAt: FieldOutputTypes['__unbound__']['Token']['updatedAt'];
-    userId: FieldOutputTypes['__unbound__']['Token']['userId'];
-    user: unbound_User;
-    readonly [RelationKeys]?: 'user';
-  };
   export type unbound_User = {
     email: FieldOutputTypes['__unbound__']['User']['email'];
     id: FieldOutputTypes['__unbound__']['User']['id'];
     password: FieldOutputTypes['__unbound__']['User']['password'];
     refreshTokens: unbound_RefreshToken[];
     targetRoles: unbound_TargetRole[];
-    tokens: unbound_Token[];
-    readonly [RelationKeys]?: 'refreshTokens' | 'targetRoles' | 'tokens';
+    readonly [RelationKeys]?: 'refreshTokens' | 'targetRoles';
   };
 }
 
@@ -101,7 +91,6 @@ export declare const models: {
   __unbound__: {
     RefreshToken: Models.unbound_RefreshToken;
     TargetRole: Models.unbound_TargetRole;
-    Token: Models.unbound_Token;
     User: Models.unbound_User;
   };
 };
@@ -132,7 +121,7 @@ type ContractBase = Omit<
                   readonly properties: {
                     readonly _id: { readonly bsonType: 'objectId' };
                     readonly created_at: { readonly bsonType: 'date' };
-                    readonly expiresAt: { readonly bsonType: 'date' };
+                    readonly expires_at: { readonly bsonType: 'date' };
                     readonly token: { readonly bsonType: 'string' };
                     readonly updated_at: { readonly bsonType: 'date' };
                     readonly user_id: { readonly bsonType: 'objectId' };
@@ -140,7 +129,7 @@ type ContractBase = Omit<
                   readonly required: readonly [
                     '_id',
                     'created_at',
-                    'expiresAt',
+                    'expires_at',
                     'token',
                     'updated_at',
                     'user_id',
@@ -170,39 +159,6 @@ type ContractBase = Omit<
                     readonly user_id: { readonly bsonType: 'objectId' };
                   };
                   readonly required: readonly ['_id', 'role', 'user_id'];
-                };
-                readonly kind: 'mongo-validator';
-                readonly validationAction: 'error';
-                readonly validationLevel: 'strict';
-              };
-            };
-            readonly tokens: {
-              readonly indexes: readonly [
-                {
-                  readonly keys: readonly [{ readonly direction: 1; readonly field: 'token' }];
-                  readonly kind: 'mongo-index';
-                  readonly unique: true;
-                },
-              ];
-              readonly kind: 'mongo-collection';
-              readonly validator: {
-                readonly jsonSchema: {
-                  readonly additionalProperties: false;
-                  readonly bsonType: 'object';
-                  readonly properties: {
-                    readonly _id: { readonly bsonType: 'objectId' };
-                    readonly created_at: { readonly bsonType: 'date' };
-                    readonly token: { readonly bsonType: 'string' };
-                    readonly updated_at: { readonly bsonType: 'date' };
-                    readonly user_id: { readonly bsonType: 'objectId' };
-                  };
-                  readonly required: readonly [
-                    '_id',
-                    'created_at',
-                    'token',
-                    'updated_at',
-                    'user_id',
-                  ];
                 };
                 readonly kind: 'mongo-validator';
                 readonly validationAction: 'error';
@@ -253,7 +209,6 @@ type ContractBase = Omit<
       readonly namespace: '__unbound__' & NamespaceId;
       readonly model: 'TargetRole';
     };
-    readonly tokens: { readonly namespace: '__unbound__' & NamespaceId; readonly model: 'Token' };
     readonly users: { readonly namespace: '__unbound__' & NamespaceId; readonly model: 'User' };
   };
   readonly domain: {
@@ -305,7 +260,7 @@ type ContractBase = Omit<
               readonly collection: 'refresh_tokens';
               readonly fields: {
                 readonly createdAt: { readonly field: 'created_at' };
-                readonly expiresAt: { readonly field: 'expiresAt' };
+                readonly expiresAt: { readonly field: 'expires_at' };
                 readonly id: { readonly field: '_id' };
                 readonly token: { readonly field: 'token' };
                 readonly updatedAt: { readonly field: 'updated_at' };
@@ -351,54 +306,6 @@ type ContractBase = Omit<
               };
             };
           };
-          readonly Token: {
-            readonly fields: {
-              readonly createdAt: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'mongo/date@1' };
-              };
-              readonly id: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'mongo/objectId@1' };
-              };
-              readonly token: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'mongo/string@1' };
-              };
-              readonly updatedAt: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'mongo/date@1' };
-              };
-              readonly userId: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'mongo/objectId@1' };
-              };
-            };
-            readonly relations: {
-              readonly user: {
-                readonly to: {
-                  readonly namespace: '__unbound__' & NamespaceId;
-                  readonly model: 'User';
-                };
-                readonly cardinality: 'N:1';
-                readonly nullable: false;
-                readonly on: {
-                  readonly localFields: readonly ['userId'];
-                  readonly targetFields: readonly ['id'];
-                };
-              };
-            };
-            readonly storage: {
-              readonly collection: 'tokens';
-              readonly fields: {
-                readonly createdAt: { readonly field: 'created_at' };
-                readonly id: { readonly field: '_id' };
-                readonly token: { readonly field: 'token' };
-                readonly updatedAt: { readonly field: 'updated_at' };
-                readonly userId: { readonly field: 'user_id' };
-              };
-            };
-          };
           readonly User: {
             readonly fields: {
               readonly email: {
@@ -430,17 +337,6 @@ type ContractBase = Omit<
                 readonly to: {
                   readonly namespace: '__unbound__' & NamespaceId;
                   readonly model: 'TargetRole';
-                };
-                readonly cardinality: '1:N';
-                readonly on: {
-                  readonly localFields: readonly ['id'];
-                  readonly targetFields: readonly ['userId'];
-                };
-              };
-              readonly tokens: {
-                readonly to: {
-                  readonly namespace: '__unbound__' & NamespaceId;
-                  readonly model: 'Token';
                 };
                 readonly cardinality: '1:N';
                 readonly on: {
@@ -497,22 +393,6 @@ type ContractBase = Omit<
           readonly onUpdate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'refresh_tokens';
-            readonly field: 'updated_at';
-            readonly namespace: '__unbound__';
-          };
-        },
-        {
-          readonly onCreate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly entry: 'tokens';
-            readonly field: 'created_at';
-            readonly namespace: '__unbound__';
-          };
-        },
-        {
-          readonly onUpdate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly entry: 'tokens';
             readonly field: 'updated_at';
             readonly namespace: '__unbound__';
           };
