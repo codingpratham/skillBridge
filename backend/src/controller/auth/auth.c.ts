@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import {registerSchema} from '../../schema/auth.t'
+import {loginSchema, registerSchema} from '../../schema/auth.t'
 import {db} from '../../prisma/db'
 import jsonwebtoken from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
@@ -105,4 +105,6 @@ export const register = async (req: Request, res: Response) => {
     }
 };
 
-export const login = async (req: Request, res: Response) => {}
+export const login = async (req: Request, res: Response) => {
+    const schema = loginSchema.safeParse(req.body)
+}
