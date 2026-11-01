@@ -114,7 +114,6 @@ export const login = async (req: Request, res: Response) => {
                 error: 'Invalid request data',
             });
         }
-
         
         
     } catch (err:any) {
